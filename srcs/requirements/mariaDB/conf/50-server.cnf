@@ -4,3 +4,6 @@ datadir = /var/lib/mysql
 socket = /run/mysqld/mysqld.socket
 bind_address=*
 user = mysql
+
+[mysql]
+default-character-set=utf8
