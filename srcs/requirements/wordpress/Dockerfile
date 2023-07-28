@@ -31,4 +31,8 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 COPY /conf/auto-config.sh /usr/local/bin
 COPY /conf/wp-config.php /var/www/wordpress
 
+#RUN chmod +x /usr/local/bin/auto-config.sh #A activer plus tard pour tester
+
 ENTRYPOINT [ "bash", "/usr/local/bin/auto-config.sh" ]
+
+EXPOSE 9000
