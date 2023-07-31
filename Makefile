@@ -18,24 +18,29 @@ D_NGINX = /home/ewurstei/data/nginx
 #------------------------------------------------------------------------------#
 
 SRCS =	srcs/docker-compose.yml
+LOG = docker_logs.log
+BLOG = docker_build_logs.log
 
 #------------------------------------------------------------------------------#
 #									 RULES									   #
 #------------------------------------------------------------------------------#
 
-all:	up
-	@$(DC) -f $(SRCS) logs --tail 100 -f
+all:	docker
 	@echo "$(LGREEN)Logs available.$(NC)"
 
-up:	$(SRCS)
+docker:	$(SRCS)
 	@sudo mkdir -p $(D_MDB)
 	@sudo mkdir -p $(D_WP)
 	@sudo mkdir -p $(D_NGINX)
 	@echo "$(LGREEN)Directories Creation Completed.$(NC)"
-	@$(call creating, $(DC) -f $(SRCS) up --build --remove-orphans -d)
+	@$(call creating, $(DC) -f $(SRCS) up --build --remove-orphans -d) &> $(BLOG)
+
+logs:
+	@$(DC) -f $(SRCS) logs > $(LOG)
 
 clean:
 	@$(call cleaning, $(DC) -f $(SRCS) stop)
+	@echo "$(LGREEN)Docker Containers Stopped.$(NC)"
 
 fclean:	clean
 	@$(RM) $(D_MDB)
@@ -43,10 +48,11 @@ fclean:	clean
 	@$(RM) $(D_NGINX)
 	@echo "$(LGREEN)Directories Removal Completed.$(NC)"
 	@$(call fcleaning, $(DC) -f $(SRCS) down)
+	@echo "$(LGREEN)Docker Containers Removed.$(NC)"
 
 re:	fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re logs
 
 #------------------------------------------------------------------------------#
 #								  MAKEUP RULES								   #

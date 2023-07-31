@@ -2,11 +2,12 @@
 
 #Demarrage de mysql
 #service mysql start;
+mysqld
 
 #Demarrage de mysql in background (&)
-mysqld &
+#mysqld &
 # Get process ID
-pid="$!"
+#pid="$!"
 
 sleep 10
 
@@ -22,9 +23,10 @@ mysql -u root -p$SQL_ROOT_PWD -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$
 mysql -u root -p$SQL_ROOT_PWD -e "FLUSH PRIVILEGES;"
 
 #mysqladmin -u root -p$SQL_ROOT_PWD shutdown
-mysqladmin -u root -p$SQL_ROOT_PWD -S /var/run/mysqld/mysqld.sock shutdown
+#mysqladmin -u root -p$SQL_ROOT_PWD -S /var/run/mysqld/mysqld.sock shutdown
 
 #exec mysqld
 
 # Wait for MariaDB to finish
-wait "$pid"
+#wait "$pid"
+tail -f /dev/null
