@@ -20,7 +20,7 @@ RUN cd /var/www \
 	&& tar -xzf wordpress-6.2.2.tar.gz \
 	&& rm wordpress-6.2.2.tar.gz
 
-COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 
 RUN	chown -R root:root /var/www/wordpress
 
@@ -31,8 +31,9 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 COPY /conf/auto-config.sh /usr/local/bin
 COPY /conf/wp-config.php /var/www/wordpress
 
-#RUN chmod +x /usr/local/bin/auto-config.sh #A activer plus tard pour tester
-
-ENTRYPOINT [ "bash", "/usr/local/bin/auto-config.sh" ]
+RUN chmod +x /usr/local/bin/auto-config.sh
+RUN chmod 777 /var/www/wordpress/wp-config.php
 
 EXPOSE 9000
+
+ENTRYPOINT [ "bash", "/usr/local/bin/auto-config.sh" ]

@@ -5,6 +5,16 @@
 RM = sudo rm -rf
 DC = docker compose
 
+IMAGES = $(shell docker images -q)
+CONTAINERS = $(shell docker ps -aq)
+NETWORK = srcs_inception
+VOLUMES = $(shell docker volume ls --quiet)
+
+RM_IMAGES = docker image rm $(IMAGES)
+RM_CONT = docker rm -f $(CONTAINERS)
+RM_VOL = docker volume rm -f $(VOLUMES)
+RM_NET = docker network rm $(NETWORK)
+
 #------------------------------------------------------------------------------#
 #								   NEEDED								   #
 #------------------------------------------------------------------------------#
@@ -36,7 +46,7 @@ docker:	$(SRCS)
 	@$(call creating, $(DC) -f $(SRCS) up --build --remove-orphans -d) &> $(BLOG)
 
 logs:
-	@$(DC) -f $(SRCS) logs > $(LOG)
+	@$(DC) -f $(SRCS) logs --follow > $(LOG)
 
 clean:
 	@$(call cleaning, $(DC) -f $(SRCS) stop)
@@ -48,7 +58,10 @@ fclean:	clean
 	@$(RM) $(D_NGINX)
 	@echo "$(LGREEN)Directories Removal Completed.$(NC)"
 	@$(call fcleaning, $(DC) -f $(SRCS) down)
-	@echo "$(LGREEN)Docker Containers Removed.$(NC)"
+	@echo "$(LGREEN)Docker Containers and Network Removed.$(NC)"
+	@if [ -n "$(IMAGES)" ]; then $(RM_IMAGES); echo "$(LGREEN)Docker Images Removed.$(NC)"; fi
+	@if [ -n "$(VOLUMES)" ]; then $(RM_VOL); echo "$(LGREEN)Docker Volumes Removed.$(NC)"; fi
+	@$(RM) *.log
 
 re:	fclean all
 
@@ -62,7 +75,7 @@ re:	fclean all
 LRED = \033[91m
 RED = \033[91m
 LGREEN = \033[92m
-LYELLOW = \033[93
+LYELLOW = \033[93m
 LMAGENTA = \033[95m
 LCYAN = \033[96m
 NC = \033[0;39m
@@ -118,22 +131,6 @@ RESULT=$$?; \
 		printf "%-60b%b" "$(LCYAN)$(CLEAN_STRING)$(LMAGENTA) PROJECT Executable Files" "⚠️$(NC)\n"; \
 	else \
 		printf "%-60b%b" "$(LCYAN)$(CLEAN_STRING)$(LMAGENTA) PROJECT Executable Files" "✅$(NC)\n"; \
-	fi; \
-	cat $@.log; \
-	rm -f $@.log; \
-	exit $$RESULT
-endef
-
-define lcleaning
-printf "%b" "$(LCYAN)$(CLEAN_STRING)$(LMAGENTA) LIBRARY Files$(NC)\r"; \
-$(1) 2> $@.log; \
-RESULT=$$?; \
-	if [ $$RESULT -ne 0 ]; then \
-		printf "%-60b%b" "$(LCYAN)$(CLEAN_STRING)$(LMAGENTA) LIBRARIES Files" "💥$(NC)\n"; \
-	elif [ -s $@.log ]; then \
-		printf "%-60b%b" "$(LCYAN)$(CLEAN_STRING)$(LMAGENTA) LIBRARIES Files" "⚠️$(NC)\n"; \
-	else \
-		printf "%-60b%b" "$(LCYAN)$(CLEAN_STRING)$(LMAGENTA) LIBRARIES Files" "✅$(NC)\n"; \
 	fi; \
 	cat $@.log; \
 	rm -f $@.log; \

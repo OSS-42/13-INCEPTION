@@ -21,10 +21,10 @@ RUN apt update \
 	&& apt install openssl -y \
 	&& openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key -subj "/C=CA/ST=Quebec/L=Quebec/O=42/OU=42/CN=ewurstei.42.fr/UID=ewurstei"
 
-RUN mkdir -p /var/run/nginx \
-	&& chmod 755 /var/www/html \
-	&& chown -R www-data:www-data /var/www/html
+RUN mkdir -p /var/run/nginx
+	#&& chmod 755 /var/www/wordpress 
+	#&& chown -R www-data:www-data /var/www/wordpress
 
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/nginx.conf /etc/nginx/
 
 CMD [ "nginx", "-g", "daemon off;" ]
