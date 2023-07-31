@@ -36,7 +36,7 @@ BLOG = docker_build_logs.log
 #------------------------------------------------------------------------------#
 
 all:	docker
-	@echo "$(LGREEN)Logs available.$(NC)"
+	@echo "$(LGREEN)Logs available. You can follow the containers readiness with command "make logs"$(NC)"
 
 docker:	$(SRCS)
 	@sudo mkdir -p $(D_MDB)
