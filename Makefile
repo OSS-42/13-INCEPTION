@@ -47,7 +47,7 @@ logs:
 	@$(DC) -f $(SRCS) logs --follow > $(LOG)
 
 copy:
-	@scp -r * ewurstei@localhost:/home/ewurstei/Documents/42/
+	@scp -r * ewurstei@ipaddress:/home/ewurstei/Documents/42/
 
 env:
 	@bash env-param.sh
