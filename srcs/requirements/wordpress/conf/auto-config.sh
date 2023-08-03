@@ -9,7 +9,7 @@ CONFIG_FILE="/var/www/wordpress/config-ok.txt"
 
 
 if [ ! -e "$CONFIG_FILE" ]
-
+then
 	touch "$CONFIG_FILE"
 
 	echo "core installing - admin user"
