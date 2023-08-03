@@ -1,6 +1,5 @@
 #!/bin/sh
 
-echo "HELLO"
 wp --info
 sleep 30
 
@@ -16,21 +15,21 @@ PHP_FILE="/run/php"
 # #	--dbhost=mariadb:3306 \
 # 	--path='/var/www/wordpress'
 
-	echo "core installing - admin user"
-	wp core install --allow-root \
-	--url='https://ewurstei.42.fr' \
-	--title=$SITE_TITLE \
-	--admin_user=$WP_ADMIN \
-	--admin_password=$WP_PWD \
-	--admin_email=$WP_EMAIL \
-	--path='/var/www/wordpress'
+echo "core installing - admin user"
+wp core install --allow-root \
+--url='https://ewurstei.42.fr' \
+--title=$SITE_TITLE \
+--admin_user=$WP_ADMIN \
+--admin_password=$WP_PWD \
+--admin_email=$WP_EMAIL \
+--path='/var/www/wordpress'
 
-	echo "user creation - second user"
-	wp user create --allow-root \
-	$USER_NAME $USER_EMAIL \
-	--role=author \
-	--user_pass=$USER_PWD \
-	--path='/var/www/wordpress'
+echo "user creation - second user"
+wp user create --allow-root \
+$USER_NAME $USER_EMAIL \
+--role=author \
+--user_pass=$USER_PWD \
+--path='/var/www/wordpress'
 
 if [ ! -e "$PHP_FILE" ]
 then
