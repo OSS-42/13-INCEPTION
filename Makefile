@@ -21,7 +21,6 @@ RM_NET = docker network rm $(NETWORK)
 
 D_MDB = /home/ewurstei/data/mariadb
 D_WP = /home/ewurstei/data/wordpress
-D_NGINX = /home/ewurstei/data/nginx
 
 #------------------------------------------------------------------------------#
 #									SOURCES									   #
@@ -41,12 +40,17 @@ all:	docker
 docker:	$(SRCS)
 	@sudo mkdir -p $(D_MDB)
 	@sudo mkdir -p $(D_WP)
-	@sudo mkdir -p $(D_NGINX)
 	@echo "$(LGREEN)Directories Creation Completed.$(NC)"
 	@$(call creating, $(DC) -f $(SRCS) up --build --remove-orphans -d) &> $(BLOG)
 
 logs:
 	@$(DC) -f $(SRCS) logs --follow > $(LOG)
+
+copy:
+	@scp -r * ewurstei@localhost:/home/ewurstei/Documents/42/
+
+env:
+	@bash env-param.sh
 
 clean:
 	@$(call cleaning, $(DC) -f $(SRCS) stop)
@@ -55,7 +59,6 @@ clean:
 fclean:	clean
 	@$(RM) $(D_MDB)
 	@$(RM) $(D_WP)
-	@$(RM) $(D_NGINX)
 	@echo "$(LGREEN)Directories Removal Completed.$(NC)"
 	@$(call fcleaning, $(DC) -f $(SRCS) down)
 	@echo "$(LGREEN)Docker Containers and Network Removed.$(NC)"
@@ -65,7 +68,7 @@ fclean:	clean
 
 re:	fclean all
 
-.PHONY: all clean fclean re logs
+.PHONY: all clean fclean re logs copy env
 
 #------------------------------------------------------------------------------#
 #								  MAKEUP RULES								   #

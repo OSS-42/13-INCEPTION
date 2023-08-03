@@ -1,13 +1,7 @@
 #!/bin/sh
 
-#Demarrage de mysql
-#service mysql start;
-mysqld &
-
 #Demarrage de mysql in background (&)
-#mysqld &
-# Get process ID
-#pid="$!"
+mysqld &
 
 sleep 10
 
@@ -28,7 +22,3 @@ mysqladmin -u root -p$SQL_ROOT_PWD -S /var/run/mysqld/mysqld.sock shutdown
 sleep 5
 
 exec mysqld_safe
-
-# Wait for MariaDB to finish
-#wait "$pid"
-#tail -f /dev/null
