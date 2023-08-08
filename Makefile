@@ -47,10 +47,12 @@ logs:
 	@$(DC) -f $(SRCS) logs --follow > $(LOG)
 
 copy:
-	@scp -r * ewurstei@ipaddress:/home/ewurstei/Documents/42/
+	@ssh ewurstei@10.211.55.3 "if [ ! -d '/home/ewurstei/Documents/42/' ]; then mkdir '/home/ewurstei/Documents/42/' && echo -e '$(LGREEN)42 directory in VM created.$(NC)'; fi"
+	@scp Makefile ewurstei@10.211.55.3:/home/ewurstei/Documents/42/
+	@scp -r srcs/ ewurstei@10.211.55.3:/home/ewurstei/Documents/42/
 
 env:
-	@bash env-param.sh
+	@bash srcs/env-param.sh
 
 clean:
 	@$(call cleaning, $(DC) -f $(SRCS) stop)
